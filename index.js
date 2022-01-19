@@ -1,12 +1,10 @@
 const express = require("express");
-const forever = require("forever");
-const child  = require("./start");
+// const forever = require("forever");
+// const child  = require("./start");
 const  app = express();
 app.use(express.json())
 app.use(express.raw());
 app.use(express.urlencoded({ extended: true }));
-
-console.log("app started")
 
 app.use('/api',require('./routes/job.routes'))
 
@@ -14,9 +12,6 @@ var startTime  = process.hrtime()
 var startUsage = process.cpuUsage()
 
 setInterval(function () {
-
-
-  // spin the CPU for 500 milliseconds
 
   var now = Date.now()
 
@@ -33,19 +28,15 @@ setInterval(function () {
 
   var elapTimeMS = hrtimeToMS(elapTime)
 
-  var elapUserMS = elapUsage.user / 1000; // microseconds to milliseconds
+  var elapUserMS = elapUsage.user / 1000;
   var elapSystMS = elapUsage.system / 1000;
-  var cpuPercent = (100 * (elapUserMS + elapSystMS) / elapTimeMS).toFixed(1)  // + '%'
-if(cpuPercent > 40){
-    forever.restart(child);
-    // forever.startServer(child);
-    console.log("restart the node server")
-}
-//   console.log('elapsed time ms:  ', elapTimeMS)
-//   console.log('elapsed user ms:  ', elapUserMS)
-//   console.log('elapsed system ms:', elapSystMS)
+  var cpuPercent = (100 * (elapUserMS + elapSystMS) / elapTimeMS).toFixed(1)
+  console.log(cpuPercent)
+  if(cpuPercent > 49){
+      console.log("restart the node server")
+      //forever.restart(child);
+  }
 console.log('cpu percent:      ', cpuPercent, '\n')
-
 }, 10000);
 
 function hrtimeToMS (hrtime) {
@@ -53,7 +44,10 @@ function hrtimeToMS (hrtime) {
 }
 
 
-app.listen("3000", () => {
-
-    console.log("server");
+app.listen("3000", (err) => {
+    if (err) {
+      console.log('server startup error', err);
+    } else {
+      console.log("server started")
+    }
 });

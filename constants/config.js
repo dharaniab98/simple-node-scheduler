@@ -4,7 +4,6 @@ module.exports = {
         name: 'poll',
         server: '0.0.0.0',
         port: 27017,
-       // address: 'mongodb://10.0.0.42/agenda?connectTimeoutMS=30000',
         address: 'mongodb://127.0.0.1/agendadb?connectTimeoutMS=30000',
         collection: 'agendaSimpleScheduler',
       },
